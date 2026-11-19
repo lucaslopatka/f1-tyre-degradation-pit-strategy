@@ -1,0 +1,21 @@
+season,round,city,soft,medium,hard,source,note
+2026,1,Melbourne,C5,C4,C3,formula1.com + Pirelli,
+2026,2,Shanghai,C4,C3,C2,Pirelli press release,
+2026,3,Suzuka,C3,C2,C1,Pirelli press release + gpblog,
+2026,4,Miami,C5,C4,C3,formula1.com,
+2026,5,Montréal,C5,C4,C3,formula1.com,kept; 1.2% wet laps removed
+2026,6,Monaco,C5,C4,C3,formula1.com + Mercedes,
+2026,7,Barcelona,C4,C3,C2,formula1.com + Pirelli press release,
+2026,8,Spielberg,C5,C4,C3,formula1.com + Pirelli press release,
+2026,9,Silverstone,C3,C2,C1,Pirelli press release,
+2026,10,Spa,C4,C3,C2,Pirelli press release + Mercedes,
+2026,11,Budapest,C5,C4,C3,Pirelli press release + formula1.com,
+2026,12,Zandvoort,C4,C3,C2,formula1.com + Pirelli press release,kept; rain laps (11.5% flagged) plus 3-lap buffer removed
+2026,13,Monza,C5,C4,C3,formula1.com + Pirelli press release,
+2026,14,Madrid,C4,C3,C2,formula1.com + Pirelli press release,
+2026,15,Baku,C5,C4,C3,formula1.com,
+2026,16,Kuala Lumpur,C4,C3,C2,"formula1.com (Bahrain GP held at Sepang, Malaysia)",kept; 10.7% wet laps removed
+2026,17,Singapore,C5,C4,C3,formula1.com,
+2026,18,Austin,C4,C3,C2,Pirelli press release (via webwire),
+2026,19,Mexico City,C5,C4,C3,formula1.com,data covers laps 1-56 of 71 (API returned no later laps)
+2026,20,São Paulo,,,,,dropped: 36% wet laps (wet race); allocation not needed

@@ -1,0 +1,12 @@
+# Python 3.10+
+#
+# fastf1 >= 3.9 is required: Formula 1 added authentication to its data APIs, so an F1TV
+# login is needed. (3.5 also moved the results backend from Ergast to Jolpica-F1.)
+fastf1>=3.9.0
+pandas>=2.0
+pyarrow>=14.0
+duckdb>=1.0
+numpy>=1.24
+statsmodels>=0.14
+matplotlib>=3.8
+scipy>=1.11

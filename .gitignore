@@ -1,0 +1,18 @@
+# FastF1 downloads its own HTTP cache here. It is the raw layer, but it is
+# large and fully reproducible, so it stays out of version control.
+cache/
+
+# Raw per-round parquet is reproducible from the cache; processed data is
+# committed so the analysis runs without re-downloading.
+data/raw/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+
+# R session history (not part of this project)
+.Rhistory
