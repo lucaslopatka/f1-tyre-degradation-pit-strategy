@@ -96,6 +96,20 @@ what is next. The "Current state" block is rewritten each session; entries below
   40%: 46 and 9). At the current settings the 7 thin cells are Suzuka, Shanghai and Silverstone SOFT and Montréal,
   Baku, Singapore and Mexico City HARD: compounds barely or never run, not a cleaning effect.
 
+## 2026-11-22 (session 9): DuckDB dropped, model metrics
+
+**Done**
+- DuckDB removed from the docs, `requirements.txt` and `CLAUDE.md`: it was never used. Data access is documented as the FastF1 library (client for the F1 live-timing API and Jolpica-F1); processing is pandas.
+- `metrics.py` writes `docs/model_metrics.md` and `data/processed/model_metrics.csv`: per circuit R², adjusted R², R² of a driver-only model, the R² added by the race-lap and tyre terms,
+  residual SD, lag-1 residual correlation within stints and the share of laps beyond 3 residual SDs, next to d and its interval.
+- Findings: R² 0.57 to 0.91 but a driver-only model already reaches 0.44 to 0.78 (the lap and tyre terms add 0.07 to 0.39); residual SD 0.43 to 1.12 s; residuals of consecutive laps in a stint correlate
+  0.20 to 0.65, so clustered standard errors are needed; all metrics are in-sample.
+- `CLAUDE.md` run list updated with the newer steps.
+
+**Next**
+1. Decide on slim stage 2 (H1, H2, H3) versus finishing with README findings and limitations.
+2. README findings, LinkedIn post; commit and push.
+
 ## 2026-11-19 (session 8): validation and header clean-up
 
 **Done**
@@ -239,5 +253,5 @@ what is next. The "Current state" block is rewritten each session; entries below
   never in this repo). OpenF1 verified as a free fallback.
 - Overtaking metric: hand-compile ~19 numbers into `data/reference/circuit_overtaking.csv`
   rather than derive them from position data.
-- DuckDB is a SQL layer over parquet, not a stored database; pandas alone would suffice at this
-  volume, and the README says so.
+- DuckDB was planned as a SQL layer over parquet; it turned out not to be needed (pandas does
+  the joins), so it was dropped (see 2026-11-22). Data access is the FastF1 Python library.

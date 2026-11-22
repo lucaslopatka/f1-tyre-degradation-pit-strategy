@@ -11,7 +11,7 @@ amendments made after scope lock. **Read `docs/PROJECT_LOG.md` for current statu
 next steps.**
 
 ## How to work on this project
-- Python: pandas, DuckDB, statsmodels, matplotlib/plotly. All code, comments and docs in English.
+- Python: pandas, statsmodels, scipy, matplotlib (data access through the FastF1 library; DuckDB was planned but is not used). All code, comments and docs in English.
 - The author reads Python comfortably but is still building the habit of writing it
   unaided. Write code that can be defended line by line in an interview: small readable
   functions, the idiomatic pattern explained briefly with why it was chosen, and a note
@@ -33,6 +33,11 @@ python -m f1_pit_strategy.ingest               # all completed rounds, skips exi
 python -m f1_pit_strategy.inspect_raw          # validation report on data/raw
 python -m f1_pit_strategy.clean                # clean laps + exclusions audit table
 python -m f1_pit_strategy.eda                  # data-quality audit, EDA, charts, reports (docs/eda.md)
+python -m f1_pit_strategy.pit_loss             # pit-lane loss P per circuit
+python -m f1_pit_strategy.degradation          # degradation rate per circuit and compound
+python -m f1_pit_strategy.decision             # one-stop or two-stop call, table and chart (docs/decision.md)
+python -m f1_pit_strategy.validate             # calls vs real stop counts (docs/validation.md)
+python -m f1_pit_strategy.metrics              # fit and residual metrics (docs/model_metrics.md)
 ```
 Data access needs FastF1 >= 3.9 and an F1TV login. FastF1 stores its own login token
 locally; it lasts about four days. Fallback source if that fails: OpenF1 (see scope.md

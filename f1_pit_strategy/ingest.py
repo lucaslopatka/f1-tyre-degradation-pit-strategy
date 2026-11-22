@@ -206,7 +206,7 @@ def check_laps_loaded(session, season: int, round_number: int) -> None:
 
 
 def round_path(raw_dir: Path, season: int, round_number: int) -> Path:
-    """Hive-style partition path, so DuckDB can read the tree directly.
+    """Hive-style partition path, so a query engine such as DuckDB (or pandas) can read the tree.
 
     Laying the files out as season=.../round=... lets a later query say
     read_parquet('data/raw/**/*.parquet', hive_partitioning := true) and get

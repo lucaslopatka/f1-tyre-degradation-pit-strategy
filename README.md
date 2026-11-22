@@ -52,6 +52,7 @@ python -m f1_pit_strategy.pit_loss        # pit-lane loss P per circuit and the 
 python -m f1_pit_strategy.degradation     # degradation rate per circuit and compound (stage 1)
 python -m f1_pit_strategy.decision        # one-stop or two-stop call, table and chart
 python -m f1_pit_strategy.validate        # compare the calls with the stops finishers actually made
+python -m f1_pit_strategy.metrics         # R², residual SD and residual checks per circuit
 ```
 
 Ingest is idempotent: it skips rounds already written. The first run downloads a few
@@ -129,7 +130,7 @@ different laps. A circuit's rate d is the lap-weighted mean of its compound slop
 
 **Decision.** Two stops win when d is above 12P/N². The call is made at the 13 circuits with at least 10 usable green-flag stops (Tier 1);
 the other six show d and lap count only, because safety cars and rain left too few green-flag stops to trust P. Result: 5 two-stop and
-8 one-stop calls, 4 of them uncertain. Table, chart and limits: [docs/decision.md](docs/decision.md).
+8 one-stop calls, 4 of them uncertain. Table, chart and limits: [docs/decision.md](docs/decision.md). Fit and residual metrics per circuit: [docs/model_metrics.md](docs/model_metrics.md).
 
 ## Validation
 
@@ -160,6 +161,7 @@ the rule into geometry: above the line two stops, below one stop. Error bars sho
 | `f1_pit_strategy/degradation.py` | Stage 1 model: degradation per circuit and compound, writes `data/processed/degradation_by_*.csv` |
 | `f1_pit_strategy/decision.py` | Tier 1 / Tier 2 decision: summary table (`docs/decision.md`) and decision chart |
 | `f1_pit_strategy/validate.py` | Compares the calls with real stop counts, writes `docs/validation.md` |
+| `f1_pit_strategy/metrics.py` | Fit and residual metrics per circuit, writes `docs/model_metrics.md` |
 | `f1_pit_strategy/clean.py` | Ordered cleaning rules, writes clean laps and the exclusions audit table |
 | `data/processed/` | `clean_laps.parquet` (13 columns, incl. `CompoundAbsolute` C1-C5) and `exclusions.parquet` (one reason per dropped lap) |
 | `data/reference/pirelli_allocation.csv` | Per round: host city (the circuit label used everywhere) and SOFT/MEDIUM/HARD mapped to C1–C5 |
@@ -199,6 +201,11 @@ allocation announcements.
 
 ## Tooling note
 
-DuckDB is used as a SQL query layer over the parquet tree, not as a stored database. At
-this data volume (~25k laps) pandas alone would be sufficient; DuckDB is there for
-querying the partitioned tree without loading it and for the reference-table joins.
+**Data access.** Laps, weather and results come through **FastF1**, a Python library (not a database). FastF1 is a client for two web APIs: the Formula 1 live-timing
+API (`livetiming.formula1.com`, which needs an F1TV login since FastF1 3.9) for lap timing, tyres, track status and weather, and the Jolpica-F1 API (`api.jolpi.ca`, the
+successor of Ergast) for the schedule and race results. The calls are `fastf1.get_event_schedule()` and `fastf1.get_session(...).load(...)`, cached on disk by FastF1.
+OpenF1 is the documented fallback source.
+
+**Processing and modelling.** pandas reads and writes the data (one parquet file per race via pyarrow); the model uses `statsmodels` (OLS with cluster-robust standard errors)
+and `scipy` (tests); charts use matplotlib. There is **no SQL layer**: DuckDB was planned as one but is not used, because pandas is enough for about 23,000 laps. The
+partitioned layout (`season=.../round=...`) would let DuckDB query it later.

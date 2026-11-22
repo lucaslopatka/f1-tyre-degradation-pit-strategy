@@ -273,9 +273,9 @@ Designed so that **the project cannot fail to produce a conclusion.**
 ## 11. Architecture
 
 ```
-FastF1 HTTP cache        →  raw parquet          →  clean parquet        →  DuckDB views  →  statsmodels
-(library-managed,           data/raw/season=2026/   data/processed/         SQL joins +      two-stage
- gitignored)                round=NN.parquet        clean_laps.parquet      aggregation      model
+FastF1 library + cache   →  raw parquet          →  clean parquet        →  pandas        →  statsmodels
+(F1 live-timing API,        data/raw/season=2026/   data/processed/         joins +          two-stage
+ Jolpica-F1; gitignored)    round=NN.parquet        clean_laps.parquet      aggregation      model
                                                     exclusions.parquet
 ```
 
@@ -284,10 +284,10 @@ FastF1 HTTP cache        →  raw parquet          →  clean parquet        →
   written.
 - Processed parquet is committed to the repo so the analysis is reproducible without
   re-downloading. The cache is gitignored.
-- **DuckDB is a SQL query layer over parquet, not a stored database.** At ~25k rows pandas
-  alone would suffice; DuckDB earns its place for querying partitioned parquet without
-  loading and for the reference-table joins. The README states this explicitly rather than
-  implying the data volume requires it.
+- **Data access is the FastF1 Python library**, a client for the Formula 1 live-timing API
+  and the Jolpica-F1 API (see the README tooling note). **DuckDB was planned as a SQL layer
+  over the parquet files but is not used**: pandas does the joins and aggregation, which is
+  enough for about 23,000 laps. (Amended 2026-11-22; the partitioned layout still allows it.)
 
 **Execution note:** FastF1 requires network access to `livetiming.formula1.com` and
 `api.jolpi.ca`. The pipeline runs locally on the author's machine, not in a sandboxed
@@ -390,3 +390,4 @@ environment.
   median clean lap within 5 race laps of the stop (replaces the looser "reference lap" in
   section 6); P per circuit = median over green-flag, dry stops (317 usable of 833). Six circuits
   have fewer than 10 usable stops and are flagged thin. Output: `data/processed/pit_loss.csv`.
+- **2026-11-22 — DuckDB dropped; data access documented.** The pipeline never used DuckDB, so it is removed from the stack and `requirements.txt`. Data comes from the FastF1 Python library (client for the F1 live-timing API and Jolpica-F1); processing is pandas; the model is statsmodels. See the README tooling note.
