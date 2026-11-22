@@ -182,7 +182,7 @@ def build_checklist(laps: pd.DataFrame, ctx: dict) -> pd.DataFrame:
         ("9 Sign-off", "FAIL-level items resolved or accepted", P, "Mexico City truncation accepted by the author"),
         ("9 Sign-off", "WARN-level items in the findings summary", P, "report 04"),
         ("9 Sign-off", "EDA report completed", P, "this file"),
-        ("9 Sign-off", "Next step confirmed", P, "proceed to pit-lane loss and the degradation model"),
+        ("9 Sign-off", "Next step confirmed", P, "data ready for modelling; later steps are documented in docs/PROJECT_LOG.md"),
     ]
     assert len(items) == 43, len(items)
     return pd.DataFrame(items, columns=["Section", "Item", "Status", "Evidence"])
@@ -243,7 +243,7 @@ Full report: `03_eda_report.md`.
 - Every count reconciles between raw, cleaned and excluded laps (report 01).
 
 ## Next step
-- [x] Data is ready to proceed to the next analysis (pit-lane loss, then the degradation model).
+- [x] Data is ready for modelling (the later steps are documented in docs/PROJECT_LOG.md).
 - [ ] A data fix is needed.
 - [ ] Further investigation is needed.
 """

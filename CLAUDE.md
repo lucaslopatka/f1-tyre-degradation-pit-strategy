@@ -38,6 +38,7 @@ python -m f1_pit_strategy.degradation          # degradation rate per circuit an
 python -m f1_pit_strategy.decision             # one-stop or two-stop call, table and chart (docs/decision.md)
 python -m f1_pit_strategy.validate             # calls vs real stop counts (docs/validation.md)
 python -m f1_pit_strategy.metrics              # fit and residual metrics (docs/model_metrics.md)
+python -m f1_pit_strategy.stage2               # hypothesis tests H1 to H3 (docs/stage2.md)
 ```
 Data access needs FastF1 >= 3.9 and an F1TV login. FastF1 stores its own login token
 locally; it lasts about four days. Fallback source if that fails: OpenF1 (see scope.md

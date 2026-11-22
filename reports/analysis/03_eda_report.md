@@ -1,6 +1,6 @@
 # 03. EDA report (workflow: programmatic-eda)
 
-Analyst: Claude with the project author. Date: 2026-11-19.
+Analyst: Claude with the project author. Date: 2026-11-22.
 Dataset: `data/processed/clean_laps.parquet`.
 Business context: each row is one normal racing lap; the data informs the one-stop versus two-stop decision per circuit.
 Thresholds: null 5%/30%, |z| 3, IQR 1.5, skew 0.5/1/2, |r| 0.8, set in `f1_pit_strategy/eda/settings.py`.
@@ -164,7 +164,7 @@ Raw `LapTime` correlations mostly measure which circuit the lap is from (97.9% o
 | 9 Sign-off | FAIL-level items resolved or accepted | PASS | Mexico City truncation accepted by the author |
 | 9 Sign-off | WARN-level items in the findings summary | PASS | report 04 |
 | 9 Sign-off | EDA report completed | PASS | this file |
-| 9 Sign-off | Next step confirmed | PASS | proceed to pit-lane loss and the degradation model |
+| 9 Sign-off | Next step confirmed | PASS | data ready for modelling; later steps are documented in docs/PROJECT_LOG.md |
 
 Result: 38 pass, 1 warn, 4 not applicable, 0 fail.
 **Final status: ready to proceed.** Warnings are carried into `04_findings_summary.md`.

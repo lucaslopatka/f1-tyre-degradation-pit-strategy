@@ -198,9 +198,9 @@ Findings that only describe data quality rank lower because they need no action.
 
 | Action | Priority | Owner | By |
 |---|---|---|---|
-| Estimate pit-lane loss `P` per circuit from the in-laps and out-laps in the audit table | High | Analyst | before the model |
-| Build stage 1 (slope per stint with shared race lap) and stage 2 (weighted regression) | High | Analyst | after `P` |
-| Mark the {int((cells['Stints'] < 4).sum())} thin cells not estimable in every output | High | Analyst | with the model |
+| Pit-lane loss `P` per circuit and stage 1 of the model: done (`pit_loss.py`, `degradation.py`, `docs/decision.md`) | Done | Analyst | done |
+| Stage 2 (weighted regression of compound slopes, H1 to H3) | High | Analyst | next |
+| Keep the {int((cells['Stints'] < 4).sum())} thin cells marked not estimable in every output | High | Analyst | done in the decision table |
 | Add the traffic filter and compare slopes | Low | Analyst | v2 |
 
 ## Plain-language note

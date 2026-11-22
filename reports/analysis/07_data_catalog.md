@@ -1,6 +1,6 @@
 # 07. Data catalog (workflow: data-catalog-entry)
 
-Date: 2026-11-19. Entries are for the files this analysis produces and uses. Technical metadata was extracted from the files, not from a database.
+Date: 2026-11-22. Entries are for the files this analysis produces and uses. Technical metadata was extracted from the files, not from a database.
 
 ## Entry 1: clean laps
 
@@ -16,7 +16,7 @@ Date: 2026-11-19. Entries are for the files this analysis produces and uses. Tec
 | Primary key | (Round, Driver, LapNumber), 0 duplicates |
 | Foreign keys | Round to `pirelli_allocation.csv`; (Round, Compound) to the allocation ladder |
 | Completeness | 100% (no nulls in any column) |
-| Freshness | built 0 hours ago from raw files ingested for all 20 rounds |
+| Freshness | built 71 hours ago from raw files ingested for all 20 rounds |
 | Duplicate rate | 0% |
 | Known issues | Mexico City laps end at lap 56 of 71; dirty-air laps are not filtered (v1); seven circuit-compound cells have fewer than 4 stints. |
 | Upstream | FastF1 (F1TV timing feed) to `data/raw/season=2026/*.parquet` to `f1_pit_strategy/clean.py` |

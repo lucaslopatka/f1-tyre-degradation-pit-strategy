@@ -1,6 +1,6 @@
 # Decision layer: one stop or two?
 
-Reproduce: `python -m f1_pit_strategy.decision` (this file is generated). Needs `degradation_by_circuit.csv` (step 7) and `pit_loss.csv` (step 6).
+Reproduce: `python -m f1_pit_strategy.decision` (this file is generated). Needs `degradation_by_circuit.csv` (from `degradation.py`) and `pit_loss.csv` (from `pit_loss.py`).
 
 **Rule.** Two stops beat one when the degradation rate d is above the threshold 12P/N² (P = pit-lane loss in seconds, N = race laps, equal stint splits).
 d is the circuit's lap-weighted mean of its compound wear slopes, from one regression per circuit (driver intercepts, shared race-lap term, a tyre-age slope per compound; standard errors clustered by stint).

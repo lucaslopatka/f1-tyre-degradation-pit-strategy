@@ -1,11 +1,11 @@
 # 06. Assumptions log (workflow: analysis-assumptions-log)
 
-**Analysis:** cleaning, profiling and insight work on the 2026 lap data. **Date:** 2026-11-19. **Analyst:** Claude with the project author.
+**Analysis:** cleaning, profiling and insight work on the 2026 lap data. **Date:** 2026-11-22. **Analyst:** Claude with the project author.
 **Decision informed:** one-stop versus two-stop strategy per circuit (`beta > 12P / N^2`).
 **Data sources:** FastF1 race laps for 20 rounds (19 kept), the hand-compiled Pirelli allocation table. **Population:** 2026 season only.
 
 An assumption is **critical** when confidence is Low and impact if wrong is High; those need a validation plan before the result is delivered.
-Status counts: open 9, tested 4, closed 2, accepted 2026-11-19 1, deferred 1, planned 1.
+Status counts: open 9, tested 5, closed 2, accepted 2026-11-19 1, deferred 1.
 
 | ID | Category | Assumption | Rationale | Confidence | Impact if wrong | Critical | Status |
 |---|---|---|---|---|---|---|---|
@@ -26,7 +26,7 @@ Status counts: open 9, tested 4, closed 2, accepted 2026-11-19 1, deferred 1, pl
 | S1 | Statistical | Degradation is linear in tyre age. | Baseline model in the scope. | Medium | Medium |  | open |
 | S2 | Statistical | Fuel burn and track evolution act the same at every circuit (one pooled race-lap effect of -0.037 s per lap). | Race data cannot separate the two. | Low | High | YES | open |
 | S3 | Statistical | Tyre wear is identified because stints start at different race laps. | Inside one stint age and lap are perfectly collinear; variance inflation factors are 1.0 to 1.3 pooled. | Medium | High |  | open |
-| S4 | Statistical | Laps inside a stint are independent. | They are not (autocorrelation, shared driver and car). | High | Medium |  | planned |
+| S4 | Statistical | Laps inside a stint are independent. | They are not (autocorrelation, shared driver and car). | High | Medium |  | tested |
 
 ## Critical assumptions and validation plans
 

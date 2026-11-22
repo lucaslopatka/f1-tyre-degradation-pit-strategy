@@ -222,8 +222,9 @@ linear slope is the matching quantity. A tree model is a possible robustness che
 
 **Why weighted by precision in stage 2.** Stage 1 gives slopes of very different precision (standard errors from 0.004 to 0.03 s per lap; the spread of per-stint slopes falls
 6-fold between 5-9 lap and 30+ lap stints, `docs/eda.md` chart 4). An unweighted regression lets a noisy cell count as much as a precise one. Inverse-variance weights (1 / SE squared)
-give the minimum-variance combination when the errors are independent with known variances (Gauss-Markov / weighted least squares); if the spread between cells exceeds the
-sampling error, a between-cell variance is added to the weights. Stage 2 is not built yet; this is the plan, and its residuals will be checked.
+give the minimum-variance combination when the errors are independent with known variances (Gauss-Markov / weighted least squares). Standard WLS also estimates a scale (the residual variance
+after weighting); a value above 1 means the cells scatter more than their stage-1 standard errors imply, and the standard errors and F-test widen to match (in stage 2 the scale is 3 to 17).
+Stage 2 is built (`f1_pit_strategy/stage2.py`); a few precise cells carry much of the weight (the top five carry 35%), which is a stated limit.
 
 **Why two stages, not one mixed model.** Each stage-1 coefficient is a defensible number on its own, and statsmodels' crossed random effects are unreliable (section 8). The cost, stated rather than hidden: stage-1 error is carried into stage 2 only through the weights.
 
@@ -301,11 +302,11 @@ environment.
 - [x] Cleaning script → clean laps + exclusions audit table (v1, no traffic filter)
 - [x] Data-quality audit and EDA (`python -m f1_pit_strategy.eda`; `docs/eda.md`, `reports/analysis/`)
 - [x] Pit-loss estimation per circuit, derived from data
-- [ ] Two-stage degradation model with intervals
+- [x] Two-stage degradation model with intervals (stage 1: per-circuit regression with intervals; stage 2: tests H1 to H3, `docs/stage2.md`)
 - [ ] Strategy optimiser (grid search over compound sequences and stint splits)
-- [ ] Validation: residual check, held-out stop-count comparison, overtaking residuals
+- [ ] Validation: residual check (done, `docs/model_metrics.md`), stop-count comparison (done, `docs/validation.md`), overtaking residuals (to do)
 - [ ] Recruiter-facing README: question, approach, findings, limitations
-- [ ] **Headline visual:** degradation rate vs pit-lane loss scatter, every circuit as a
+- [x] **Headline visual** (built differently: threshold 12P/N² on x, degradation d on y, dashed y = x line, 13 Tier 1 circuits, `reports/figures/09_decision_chart.png`; planned as:) degradation rate vs pit-lane loss scatter, every circuit as a
       point, with the `β = 12P/N²` threshold curve drawn. Above the line, one-stop
       circuits; below, two-stop.
 - [ ] LinkedIn post with 2–3 visuals
@@ -391,3 +392,8 @@ environment.
   section 6); P per circuit = median over green-flag, dry stops (317 usable of 833). Six circuits
   have fewer than 10 usable stops and are flagged thin. Output: `data/processed/pit_loss.csv`.
 - **2026-11-22 — DuckDB dropped; data access documented.** The pipeline never used DuckDB, so it is removed from the stack and `requirements.txt`. Data comes from the FastF1 Python library (client for the F1 live-timing API and Jolpica-F1); processing is pandas; the model is statsmodels. See the README tooling note.
+- **2026-11-22 — Stage 2 done (H1 to H3), with standard WLS.** Plain weighted least squares on the circuit-compound slopes with weights 1/SE^2 (no between-cell variance estimate, no Q test). **H2 supported:** a joint F-test of the circuit terms
+  (`Beta ~ Compound` against `Beta ~ Compound + Circuit`) gives F = 11.06 on 18 and 27 df, p = 3e-8, and weighted R^2 rises from 0.21 to 0.91. **H1 not supported:** `Beta ~ Circuit + Softness` gives +0.0038 s/lap per step
+  (95% interval -0.006 to +0.013, p = 0.42; robust to the tyre-age window); per section 4 this is a warning about data or filters, recorded as open, and no compound ranking is claimed. **H3 not supported**, inconclusive: tested across circuits with
+  compound controls (`Beta ~ Compound + Temp`), not "controlling for circuit" as written in section 4, because circuit intercepts would absorb a circuit-level temperature; errors are clustered by circuit (p = 0.25) because cells of one circuit share one temperature
+  (plain WLS gives p = 0.10 and is too optimistic). H2 tests "circuits differ given compound"; an interaction cannot be separated from residual error with one slope per cell.

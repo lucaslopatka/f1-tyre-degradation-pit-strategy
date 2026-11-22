@@ -1,6 +1,6 @@
 # 09. QA checklist (workflow: analysis-qa-checklist)
 
-Date: 2026-11-19. Reviewer: Claude (self-review). Intended audience: the project author and a reviewer of the project.
+Date: 2026-11-22. Reviewer: Claude (self-review). Intended audience: the project author and a reviewer of the project.
 
 ## Automated checks
 

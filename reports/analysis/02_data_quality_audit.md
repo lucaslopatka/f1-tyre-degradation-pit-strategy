@@ -1,6 +1,6 @@
 # 02. Data quality audit (skill: data-quality-audit)
 
-Date: 2026-11-19. Assessed by: Claude with the project author.
+Date: 2026-11-22. Assessed by: Claude with the project author.
 Dataset: the ingested laps, `data/raw/season=2026/round=NN.parquet` (23,323 rows, 31 columns, 20 races).
 Scope: full table, before any cleaning. A second table at the end checks the cleaned output.
 
@@ -79,7 +79,7 @@ None.
 | Accuracy | No impossible sensor readings (TrackTemp 0.0) | FAIL (MEDIUM) | 26 laps have TrackTemp exactly 0.0 (a missing reading stored as zero) |
 | Accuracy | Lap data matches an independent source | PASS | not re-tested here; the 20 drivers of round 1 matched FastF1's race results in an earlier session |
 | Timeliness | All expected rounds are present (20 of 20) | PASS | 20 rounds ingested, 20 expected from the reference table |
-| Timeliness | Raw files are newer than the last schedule change | PASS | oldest file 27 h old, newest 27 h old; no feed SLA exists for a finished season |
+| Timeliness | Raw files are newer than the last schedule change | PASS | oldest file 98 h old, newest 98 h old; no feed SLA exists for a finished season |
 
 ## Null profile (columns with any nulls; WARN from 5%, FAIL from 30%)
 
@@ -115,7 +115,7 @@ None.
 
 | Files | Oldest (h) | Newest (h) |
 |---|---|---|
-| 20 | 26.8 | 26.7 |
+| 20 | 97.9 | 97.8 |
 
 The season is finished, so there is no feed SLA; the check is coverage: all 20 expected rounds are present.
 

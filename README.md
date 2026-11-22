@@ -1,6 +1,6 @@
 # F1 Tyre Degradation & Pit Strategy (2026 Season)
 
-**Work in progress.** Scope locked; ingestion, cleaning (v1), EDA, pit-lane loss, the degradation model, the one-stop/two-stop decision and its validation are done; stage 2 of the model (H1 to H3), the optimiser and the findings write-up are next.
+**Work in progress.** Scope locked; ingestion, cleaning (v1), EDA, pit-lane loss, the degradation model, the one-stop/two-stop decision and its validation are done; the stage 2 hypothesis tests (H1 to H3) are done; the optimiser, H4 and H5 and the findings write-up are next.
 
 ## The question
 
@@ -53,6 +53,7 @@ python -m f1_pit_strategy.degradation     # degradation rate per circuit and com
 python -m f1_pit_strategy.decision        # one-stop or two-stop call, table and chart
 python -m f1_pit_strategy.validate        # compare the calls with the stops finishers actually made
 python -m f1_pit_strategy.metrics         # R², residual SD and residual checks per circuit
+python -m f1_pit_strategy.stage2          # hypothesis tests H1 to H3 on the circuit-compound slopes
 ```
 
 Ingest is idempotent: it skips rounds already written. The first run downloads a few
@@ -132,6 +133,12 @@ different laps. A circuit's rate d is the lap-weighted mean of its compound slop
 the other six show d and lap count only, because safety cars and rain left too few green-flag stops to trust P. Result: 5 two-stop and
 8 one-stop calls, 4 of them uncertain. Table, chart and limits: [docs/decision.md](docs/decision.md). Fit and residual metrics per circuit: [docs/model_metrics.md](docs/model_metrics.md).
 
+## Hypothesis tests (stage 2)
+
+Weighted least squares (weights 1/SE²) on the 50 circuit-compound slopes: **H2 holds** (a joint F-test shows circuit terms improve the fit, F = 11.1, p = 3e-8; weighted R² rises from 0.21 to 0.91, so a per-circuit rule is justified); **H1 does not**
+(a softer compound does not wear faster inside a circuit, whatever the tyre-age window); **H3 is not supported** (p = 0.25 with errors clustered by circuit, and it cannot be tested well with 19 circuits). H1 is recorded as an open warning:
+the project makes no compound ranking. Details, chart and limits: [docs/stage2.md](docs/stage2.md).
+
 ## Validation
 
 The 13 calls are compared with the pit stops of the cars that finished each race. The model agrees at 10 of 13 circuits; the three that differ (Monaco,
@@ -162,6 +169,7 @@ the rule into geometry: above the line two stops, below one stop. Error bars sho
 | `f1_pit_strategy/decision.py` | Tier 1 / Tier 2 decision: summary table (`docs/decision.md`) and decision chart |
 | `f1_pit_strategy/validate.py` | Compares the calls with real stop counts, writes `docs/validation.md` |
 | `f1_pit_strategy/metrics.py` | Fit and residual metrics per circuit, writes `docs/model_metrics.md` |
+| `f1_pit_strategy/stage2.py` | Stage 2: tests H1, H2, H3 on the circuit-compound slopes, writes `docs/stage2.md` |
 | `f1_pit_strategy/clean.py` | Ordered cleaning rules, writes clean laps and the exclusions audit table |
 | `data/processed/` | `clean_laps.parquet` (13 columns, incl. `CompoundAbsolute` C1-C5) and `exclusions.parquet` (one reason per dropped lap) |
 | `data/reference/pirelli_allocation.csv` | Per round: host city (the circuit label used everywhere) and SOFT/MEDIUM/HARD mapped to C1–C5 |
@@ -194,6 +202,7 @@ allocation announcements.
   São Paulo returns with only the dry laps of a mostly wet race and adds one good cell and two
   empty ones (cells with fewer than 4 stints rise from 7 to 9). Changing the post-rain buffer
   (0 to 5 laps) or the outlier ratio (1.05 to 1.10) left those counts at 45 and 7.
+- **Open problem (H1):** softer compounds do not show faster wear in the model (slopes rise with softness in only 6 of 19 circuits; softer is faster when fresh by a median 0.11 s only). This may mean the wear rate d is biased by an unknown amount, so the borderline calls are the most exposed; no compound ranking is claimed. Details and next checks: [docs/stage2.md](docs/stage2.md).
 - Dirty-air (traffic) laps are not filtered in v1 and can inflate degradation slopes.
 - Mexico City data covers laps 1-56 of a 71-lap race (the API returned no later laps), so
   its degradation estimate rests on tyre ages up to about 43 laps only.

@@ -1,6 +1,6 @@
 # 04. EDA findings summary (workflow: programmatic-eda)
 
-Dataset: cleaned 2026 race laps (15,206 rows). Date: 2026-11-19. Analyst: Claude with the project author.
+Dataset: cleaned 2026 race laps (15,206 rows). Date: 2026-11-22. Analyst: Claude with the project author.
 Full report: `03_eda_report.md`.
 
 ## Dataset at a glance
@@ -47,6 +47,6 @@ Full report: `03_eda_report.md`.
 - Every count reconciles between raw, cleaned and excluded laps (report 01).
 
 ## Next step
-- [x] Data is ready to proceed to the next analysis (pit-lane loss, then the degradation model).
+- [x] Data is ready for modelling (the later steps are documented in docs/PROJECT_LOG.md).
 - [ ] A data fix is needed.
 - [ ] Further investigation is needed.

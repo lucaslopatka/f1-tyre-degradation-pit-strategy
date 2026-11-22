@@ -44,7 +44,7 @@ ASSUMPTIONS = [
     ("S3", "Statistical", "Tyre wear is identified because stints start at different race laps.", "Inside one stint age and lap are perfectly collinear; variance inflation factors are 1.0 to 1.3 pooled.", "Medium", "High",
      "Check identification per circuit; simulate data with a known slope and recover it.", "open"),
     ("S4", "Statistical", "Laps inside a stint are independent.", "They are not (autocorrelation, shared driver and car).", "High", "Medium",
-     "Use stint-level slopes in stage 1 and cluster-robust or precision-weighted errors in stage 2.", "planned"),
+     "Stage 1 uses driver intercepts and standard errors clustered by stint; lag-1 residual correlation of 0.20 to 0.65 was measured (docs/model_metrics.md). Stage 2 weights by precision.", "tested"),
 ]
 COLUMNS = ["ID", "Category", "Assumption", "Rationale", "Confidence", "Impact if wrong", "Alternatives / validation", "Status"]
 

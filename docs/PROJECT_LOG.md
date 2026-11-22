@@ -3,15 +3,16 @@
 Newest entry first. One entry per working session: what was done, decisions and why,
 what is next. The "Current state" block is rewritten each session; entries below it are history.
 
-## Current state (2026-11-19)
+## Current state (2026-11-22)
 
 - **Done:** scope locked; ingestion of all 20 completed 2026 rounds (23,323 raw laps); cleaning v1 (13 rules, no traffic filter) giving 15,206 clean laps
   (65.2%) in 854 stints; allocation table complete; data-quality audit and EDA; pit-lane loss P per circuit; stage 1 degradation model (rate d per circuit);
-  Tier 1 / Tier 2 decision layer (5 two-stop and 8 one-stop calls at 13 circuits); validation against real stop counts (model agrees at 10 of 13).
-- **Outputs:** `data/processed/` (`clean_laps`, `exclusions`, `pit_loss.csv`, `degradation_by_*.csv`, `decision_summary.csv`, `validation_stops.csv`);
-  `docs/eda.md`, `docs/decision.md`, `docs/validation.md`; `reports/figures/` (nine charts); `reports/analysis/` (nine reports). Rebuild in order:
-  `clean`, `eda`, `pit_loss`, `degradation`, `decision`, `validate` (each `python -m f1_pit_strategy.<name>`).
-- **Not done:** stage 2 of the model (H1, H2, H3 tests), H4/H5 write-up, grid-search optimiser, README findings, LinkedIn post.
+  Tier 1 / Tier 2 decision layer (5 two-stop and 8 one-stop calls at 13 circuits); validation against real stop counts (model agrees at 10 of 13); model metrics table; stage 2 hypothesis tests. Repo on GitHub (public).
+- **Outputs:** `data/processed/` (`clean_laps`, `exclusions`, `pit_loss.csv`, `degradation_by_*.csv`, `decision_summary.csv`, `validation_stops.csv`, `model_metrics.csv`);
+  `docs/eda.md`, `docs/decision.md`, `docs/validation.md`, `docs/model_metrics.md`; `reports/figures/` (nine charts); `reports/analysis/` (nine reports). Rebuild in order:
+  `clean`, `eda`, `pit_loss`, `degradation`, `decision`, `validate`, `metrics` (each `python -m f1_pit_strategy.<name>`).
+- **Not done:** H4/H5 write-up, curvature check (H1 follow-up), grid-search optimiser, README findings, LinkedIn post.
+- **Open problem (H1):** the model does not recover that softer compounds wear faster (6 of 19 circuits rise with softness, 6 fall, 7 mixed; softer faster when fresh by a median 0.11 s). d may be biased by an unknown amount; borderline calls are most exposed. See `docs/stage2.md`.
 - **Open data issues:** Mexico City data stops at lap 56 of 71. Round 16 (FastF1 name "Bahrain Grand Prix") was held at Sepang, Kuala Lumpur, so it is
   labelled Kuala Lumpur. `circuit_overtaking.csv` is not compiled (needed for H5).
 
@@ -41,11 +42,11 @@ what is next. The "Current state" block is rewritten each session; entries below
 - [x] Stage 1 of the degradation model (`python -m f1_pit_strategy.degradation`): one pooled regression per circuit
       (driver intercepts, shared race lap, tyre-age slope per compound, stint-clustered SEs); d per circuit = lap-weighted mean
       of the estimable compound slopes. d runs from 0.000 (Montréal) to 0.152 s/lap (Barcelona); race-lap effect -0.007 to -0.073.
-- [ ] Stage 2: slopes on compound, circuit, temperature (H2, H3)
+- [x] Stage 2 (`python -m f1_pit_strategy.stage2` -> `docs/stage2.md`): plain WLS (weights 1/SE²): H2 supported (joint F-test F = 11.06, p = 3e-8; weighted R² 0.21 to 0.91); H1 NOT supported (+0.0038 s/lap per step, p = 0.42; robust to tyre-age window; open warning); H3 not supported (p = 0.25 clustered by circuit, inconclusive, 19 circuits)
 - [x] Decision layer in two tiers (`python -m f1_pit_strategy.decision` -> `docs/decision.md`, `reports/figures/09_decision_chart.png`).
       Tier 1 (13 circuits): 5 two-stop (Barcelona, Spielberg, Budapest, Zandvoort, Kuala Lumpur), 8 one-stop; 4 calls uncertain
       (Zandvoort, Kuala Lumpur, Monaco, Austin). Tier 2 (6 circuits): d and lap count only.
-- [ ] H1-H5 tests
+- [ ] H4 write-up (calls vs modal strategy is in `docs/validation.md`) and H5 (needs `circuit_overtaking.csv`)
 - [x] Validation against real stop counts (`python -m f1_pit_strategy.validate` -> `docs/validation.md`): the model agrees with what finishers did at 10 of 13
       Tier 1 circuits; the 3 disagreements (Monaco, Mexico City, Silverstone) are all 1-Stop calls and are explained by free stops under SC/VSC/red flags.
       Naive baselines: always 1-Stop 5 of 13, always 2-Stop 8 of 13 (actual stops); on green-flag-equivalent stops model 12, always 1-Stop 9, always 2-Stop 4.
@@ -95,6 +96,24 @@ what is next. The "Current state" block is rewritten each session; entries below
   circuit-compound cells have >= 8 stints, 7 have < 4); the wet cutoff did (10%: 40 and 7;
   40%: 46 and 9). At the current settings the 7 thin cells are Suzuka, Shanghai and Silverstone SOFT and Montréal,
   Baku, Singapore and Mexico City HARD: compounds barely or never run, not a cleaning effect.
+
+## 2026-11-22 (session 10): stage 2 and md audit
+
+**Done**
+- Audited every md file. Stale text fixed in the project log, the scope checklist and in the generators behind `reports/analysis/` (methodology, assumptions, insights, EDA sign-off), then regenerated.
+- `stage2.py`: plain weighted least squares (weights 1/SE²) of the 50 circuit-compound slopes; the DerSimonian-Laird variance and the Q test were dropped for standard tools. H2: joint F-test, `Beta ~ Compound` against
+  `Beta ~ Compound + Circuit`, F = 11.06 on 18 and 27 df, p = 3e-8, weighted R² 0.21 to 0.91. H1: `Beta ~ Circuit + Softness` gives +0.0038 s/lap per step (95% interval -0.006 to +0.013, p = 0.42); the softer compound wears more in 21 of 43
+  within-circuit pairs; same under tyre-age windows 6+, 11+ and up to 20. H3: `Beta ~ Compound + Temp` gives +0.0008 s/lap per °C, p = 0.25 with errors clustered by circuit (plain WLS p = 0.10 is too optimistic: only 19 distinct temperatures).
+  The five most precise cells carry 35% of the weight (effective sample 24 of 50).
+- Chart 10 (`reports/figures/10_degradation_by_cell.png`): slopes with intervals per circuit and compound.
+
+**Decisions**
+- H1 failure is recorded as an open warning (scope section 4: it may signal a data or filter problem), not hidden. Nothing in the Tier 1 / Tier 2 calls changes. No compound ranking is claimed.
+- H3 tested across circuits with compound controls (circuit intercepts would absorb temperature); H2 as a joint F-test of the circuit terms. Both departures from the scope wording are in scope section 14.
+
+**Next**
+1. Curvature check (quadratic tyre-age term) as the first follow-up to H1; then the optimiser or the README findings.
+2. Write the findings README and LinkedIn post; compile `circuit_overtaking.csv` only if H5 stays in scope.
 
 ## 2026-11-22 (session 9): DuckDB dropped, model metrics
 

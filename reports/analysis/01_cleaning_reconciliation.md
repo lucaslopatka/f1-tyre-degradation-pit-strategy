@@ -1,6 +1,6 @@
 # 01. Cleaning funnel and reconciliation (workflow: metric-reconciliation)
 
-Date: 2026-11-19.
+Date: 2026-11-22.
 
 ## Metric and sources
 - **Metric:** number of laps, from the raw files to the processed tables.

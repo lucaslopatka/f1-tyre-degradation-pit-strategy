@@ -1,6 +1,6 @@
 # 08. Methodology (workflows: analysis-documentation, methodology-explainer)
 
-Date: 2026-11-19. Audience: mixed (business reader and technical reviewer); each section says which.
+Date: 2026-11-22. Audience: mixed (business reader and technical reviewer); each section says which.
 
 ## 1. Business context
 - **Question:** at a given circuit, under dry green-flag conditions, when does a two-stop strategy beat a one-stop?
@@ -82,7 +82,7 @@ points the wrong way; the model will have to correct for that. Each track is jud
 Thirteen ordered rules assign each lap its first failing reason (a loop of `Series.mask` calls, so one reason per lap); the two stint-level rules (outlier above 1.07 x
 stint median, fewer than 5 remaining laps) run after the row rules so they see only surviving laps. `LapTimeDelta` is lap time minus the circuit median of clean laps.
 The race-lap slope is an OLS fit of `LapTimeDelta` on `LapNumber`. Variance inflation factors for `TyreLife`, `LapNumber`, `TrackTemp`, `FreshTyre` are 1.0 to 1.3.
-Stage 1 of the planned model fits a slope per stint with a shared race-lap term; stage 2 regresses stint slopes on compound, circuit and temperature, weighted by precision.
+Stage 1 (built, `f1_pit_strategy/degradation.py`) fits one regression per circuit: driver intercepts, a shared race-lap term and a tyre-age slope per compound, with standard errors clustered by stint. Stage 2 (planned) regresses the compound slopes on compound, circuit and temperature, weighted by precision.
 
 ### Limitations (what they mean for the conclusions)
 - Race lap carries fuel burn and track evolution together, so only their sum is estimated.
