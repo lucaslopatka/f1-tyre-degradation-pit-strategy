@@ -80,6 +80,7 @@ share of laps whose residual is more than three residual SDs. *Tier* is the deci
 
 - Validation against real stop counts (agreement with finishers, naive baselines): `docs/validation.md`.
 - Pit-lane loss (median P, IQR, number of stops) and the decision table: `docs/decision.md`.
+- Stage 2 hypothesis tests (joint F-test for H2, WLS fits for H1 and H3, weighted R² 0.21 to 0.91, residual scale, weight concentration): `docs/stage2.md`.
 - Data-quality score of the raw laps (8.9 of 10), cleaning funnel and EDA statistics: `docs/eda.md` and `reports/analysis/`.
 
 ## Limits
