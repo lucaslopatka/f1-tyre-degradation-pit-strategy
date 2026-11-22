@@ -11,7 +11,7 @@ amendments made after scope lock. **Read `docs/PROJECT_LOG.md` for current statu
 next steps.**
 
 ## How to work on this project
-- Python: pandas, statsmodels, scipy, matplotlib (data access through the FastF1 library; DuckDB was planned but is not used). All code, comments and docs in English.
+- Python: pandas, statsmodels, scipy, matplotlib (data access through the FastF1 library). All code, comments and docs in English.
 - The author reads Python comfortably but is still building the habit of writing it
   unaided. Write code that can be defended line by line in an interview: small readable
   functions, the idiomatic pattern explained briefly with why it was chosen, and a note

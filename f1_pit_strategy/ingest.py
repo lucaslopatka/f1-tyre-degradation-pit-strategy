@@ -206,11 +206,11 @@ def check_laps_loaded(session, season: int, round_number: int) -> None:
 
 
 def round_path(raw_dir: Path, season: int, round_number: int) -> Path:
-    """Hive-style partition path, so a query engine such as DuckDB (or pandas) can read the tree.
+    """Hive-style partition path, so a query engine or pandas can read the tree.
 
-    Laying the files out as season=.../round=... lets a later query say
-    read_parquet('data/raw/**/*.parquet', hive_partitioning := true) and get
-    season and round back as real columns without any glue code.
+    Laying the files out as season=.../round=... keeps one file per race and lets
+    tools that understand this layout read the whole tree and get season and round
+    back as real columns without any glue code.
     """
     return raw_dir / f"season={season}" / f"round={round_number:02d}.parquet"
 

@@ -286,9 +286,8 @@ FastF1 library + cache   →  raw parquet          →  clean parquet        →
 - Processed parquet is committed to the repo so the analysis is reproducible without
   re-downloading. The cache is gitignored.
 - **Data access is the FastF1 Python library**, a client for the Formula 1 live-timing API
-  and the Jolpica-F1 API (see the README tooling note). **DuckDB was planned as a SQL layer
-  over the parquet files but is not used**: pandas does the joins and aggregation, which is
-  enough for about 23,000 laps. (Amended 2026-11-22; the partitioned layout still allows it.)
+  and the Jolpica-F1 API (see the README tooling note). Joins and aggregation are done with
+  pandas, which is enough for about 23,000 laps.
 
 **Execution note:** FastF1 requires network access to `livetiming.formula1.com` and
 `api.jolpi.ca`. The pipeline runs locally on the author's machine, not in a sandboxed
@@ -391,7 +390,7 @@ environment.
   median clean lap within 5 race laps of the stop (replaces the looser "reference lap" in
   section 6); P per circuit = median over green-flag, dry stops (317 usable of 833). Six circuits
   have fewer than 10 usable stops and are flagged thin. Output: `data/processed/pit_loss.csv`.
-- **2026-11-22 — DuckDB dropped; data access documented.** The pipeline never used DuckDB, so it is removed from the stack and `requirements.txt`. Data comes from the FastF1 Python library (client for the F1 live-timing API and Jolpica-F1); processing is pandas; the model is statsmodels. See the README tooling note.
+- **2026-11-22 — Data access documented.** Data comes from the FastF1 Python library (a client for the F1 live-timing API and Jolpica-F1); processing is pandas and the model is statsmodels. See the README tooling note.
 - **2026-11-22 — Stage 2 done (H1 to H3), with standard WLS.** Plain weighted least squares on the circuit-compound slopes with weights 1/SE^2 (no between-cell variance estimate, no Q test). **H2 supported:** a joint F-test of the circuit terms
   (`Beta ~ Compound` against `Beta ~ Compound + Circuit`) gives F = 11.06 on 18 and 27 df, p = 3e-8, and weighted R^2 rises from 0.21 to 0.91. **H1 not supported:** `Beta ~ Circuit + Softness` gives +0.0038 s/lap per step
   (95% interval -0.006 to +0.013, p = 0.42; robust to the tyre-age window); per section 4 this is a warning about data or filters, recorded as open, and no compound ranking is claimed. **H3 not supported**, inconclusive: tested across circuits with
