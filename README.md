@@ -2,6 +2,8 @@
 
 **Work in progress.** Scope locked; ingestion, cleaning (v1), EDA, pit-lane loss, the degradation model, the one-stop/two-stop decision and its validation are done; the stage 2 hypothesis tests (H1 to H3) are done; the optimiser, H4 and H5 and the findings write-up are next.
 
+**Report:** [F1_pit_strategy_report.pdf](reports/presentation/F1_pit_strategy_report.pdf) is a 29-slide PDF that tells the whole project: the story and objective, data ingestion, cleaning, EDA, modelling, results, validation and conclusions.
+
 ## The question
 
 **At a given circuit, under dry green-flag conditions, when does a two-stop strategy
@@ -174,6 +176,7 @@ the rule into geometry: above the line two stops, below one stop. Error bars sho
 | `data/processed/` | `clean_laps.parquet` (13 columns, incl. `CompoundAbsolute` C1-C5) and `exclusions.parquet` (one reason per dropped lap) |
 | `data/reference/pirelli_allocation.csv` | Per round: host city (the circuit label used everywhere) and SOFT/MEDIUM/HARD mapped to C1–C5 |
 | `docs/` | `scope.md` (locked scope and amendments), `PROJECT_LOG.md` (status and decisions), `eda.md` (the eight charts with their conclusions) |
+| `reports/presentation/` | The project report as a PDF (29 slides) |
 | `reports/figures/` | The eight EDA charts |
 | `reports/analysis/` | Nine reports: reconciliation, audit, EDA, findings, insights, assumptions, catalog, methodology, QA |
 | `notebooks/` | Exploration (empty so far) |
@@ -216,5 +219,4 @@ successor of Ergast) for the schedule and race results. The calls are `fastf1.ge
 OpenF1 is the documented fallback source.
 
 **Processing and modelling.** pandas reads and writes the data (one parquet file per race via pyarrow); the model uses `statsmodels` (OLS with cluster-robust standard errors)
-and `scipy` (tests); charts use matplotlib. There is **no SQL layer**: DuckDB was planned as one but is not used, because pandas is enough for about 23,000 laps. The
-partitioned layout (`season=.../round=...`) would let DuckDB query it later.
+and `scipy` (tests); charts use matplotlib.

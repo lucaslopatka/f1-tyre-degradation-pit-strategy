@@ -97,6 +97,13 @@ what is next. The "Current state" block is rewritten each session; entries below
   40%: 46 and 9). At the current settings the 7 thin cells are Suzuka, Shanghai and Silverstone SOFT and Montréal,
   Baku, Singapore and Mexico City HARD: compounds barely or never run, not a cleaning effect.
 
+## 2026-11-22 (session 11): project report
+
+**Done**
+- Built the project report as a 29-slide deck covering every stage (objective and story, ingestion, cleaning, EDA, modelling, results and visualization, validation, conclusions, appendix); the outline links to each stage and the repository link is clickable.
+- Only the PDF is published in the repository (`reports/presentation/F1_pit_strategy_report.pdf`, linked from the README); the editable PPTX stays on the author's computer and is git-ignored.
+- README: removed the DuckDB sentences from the tooling note (the scope and this log still record that DuckDB was dropped).
+
 ## 2026-11-22 (session 10): stage 2 and md audit
 
 **Done**

@@ -16,3 +16,6 @@ venv/
 
 # R session history (not part of this project)
 .Rhistory
+
+# Editable slide deck stays local; only the PDF is published
+reports/presentation/*.pptx
